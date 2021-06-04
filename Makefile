@@ -1,5 +1,5 @@
-game_name = arctic-grind
-game_id = ht.sr.git.arcticGrind
+game_name = souped-up
+game_id = xyz.neolog.soupedUp
 game_version = devel
 release_mode = debug
 
