@@ -1,8 +1,17 @@
+local mainMenu = require("menu/mainMenu")
+
+local state
+
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	bg = love.graphics.newImage("res/test.png")
+
+	state = mainMenu.new()
+end
+
+function love.update(dt)
+	state:update(dt)
 end
 
 function love.draw()
-	love.graphics.draw(bg)
+	state:draw()
 end
