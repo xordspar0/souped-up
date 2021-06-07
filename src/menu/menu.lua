@@ -1,13 +1,15 @@
+local input = require("input")
+
 local menu = {}
 
 function menu.update(menu)
 	local limit = #menu.buttons
 
-	if love.keyboard.isDown("return") then
+	if input.confirm() then
 		menu.buttons[menu.selected].action()
-	elseif love.keyboard.isDown("up") then
+	elseif input.up() then
 		menu.selected = menu.selected - 1
-	elseif love.keyboard.isDown("down") then
+	elseif input.down() then
 		menu.selected = menu.selected + 1
 	end
 
