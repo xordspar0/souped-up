@@ -1,42 +1,63 @@
 local input = require("input")
+local lume = require("vendor/lume")
 
 local menu = {}
 
-function menu.update(menu)
-	local limit = #menu.buttons
+menu.bindings = {
+	{ key = "confirm", action = function(menu) return menu.buttons[menu.selected].action() end },
+	{ key = "up",      action = function(menu) menu.selected = menu.selected - 1 end },
+	{ key = "down",    action = function(menu) menu.selected = menu.selected + 1 end },
+	{ key = "up",      action = function(menu) end },
+	{ key = "up",      action = function(menu) end },
+}
 
-	if input.confirm() then
-		menu.buttons[menu.selected].action()
-	elseif input.up() then
-		menu.selected = menu.selected - 1
-	elseif input.down() then
-		menu.selected = menu.selected + 1
+function menu.new(buttons)
+	self = setmetatable({}, {__index = menu})
+
+	self.selected = 1
+	self.buttons = buttons
+	self.alreadyPressed = {}
+
+	return self
+end
+
+function menu:update()
+	for _, binding in ipairs(self.bindings) do
+		local key = binding.key
+		local action = binding.action
+
+		if input[key]() then
+			if not self.alreadyPressed[key] then
+				nextMenu = action(self)
+				if nextMenu ~= nil then
+					return nextMenu
+				end
+			end
+
+			self.alreadyPressed[key] = true
+		else
+			self.alreadyPressed[key] = false
+		end
 	end
 
-	if menu.selected > limit then
-		menu.selected = limit
-	end
-
-	if menu.selected < 1 then
-		menu.selected = 1
-	end
+	self.selected = lume.clamp(self.selected, 1, #self.buttons)
 end
 
 local buttonWidth = 350
 local buttonHeight = 50
-function menu.draw(menu)
+function menu:draw()
 	local width, height = love.graphics.getDimensions()
-	for i, button in ipairs(menu.buttons) do
+	for i, button in ipairs(self.buttons) do
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.rectangle(
-			menu.selected == i and "fill" or "line",
+			self.selected == i and "fill" or "line",
 			width / 2 - buttonWidth / 2,
 			height / 2 + i * (buttonHeight + 10),
 			buttonWidth,
 			buttonHeight
 		)
 
-		if menu.selected == i then love.graphics.setColor(0, 0, 0) end
+		if self.selected == i then love.graphics.setColor(0, 0, 0) end
 		love.graphics.printf(
 			button.name,
 			width / 2 - buttonWidth / 2,
