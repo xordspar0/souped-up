@@ -3,23 +3,29 @@ local lume = require("vendor/lume")
 
 local menu = {}
 
-menu.bindings = {
-	{ key = "confirm", action = function(self) return self.buttons[self.selected].action() end },
-	{ key = "up",      action = function(self) self.selected = self.selected - 1 end },
-	{ key = "down",    action = function(self) self.selected = self.selected + 1 end },
-	{ key = "left",    action = function(self) end },
-	{ key = "right",   action = function(self) end },
-}
-
 function menu.new(direction, buttons)
 	local self = setmetatable({}, {__index = menu})
+
+	self.bindings = {
+		{ key = "confirm", action = function(self) return self.buttons[self.selected].action() end },
+	}
 
 	if direction == "TD" then
 		self.buttonWidth = 100
 		self.buttonHeight = 30
+
+		self.bindings = lume.extend(self.bindings,
+			{ key = "up",      action = function(self) self.selected = self.selected - 1 end },
+			{ key = "down",    action = function(self) self.selected = self.selected + 1 end }
+		)
 	elseif direction == "LR" then
 		self.buttonWidth = 64
 		self.buttonHeight = 64
+
+		self.bindings = lume.extend(self.bindings,
+			{ key = "left",    action = function(self) self.selected = self.selected - 1 end },
+			{ key = "right",   action = function(self) self.selected = self.selected + 1 end }
+		)
 	else
 		error("Invalid direction: " .. direction)
 	end
@@ -62,8 +68,14 @@ function menu:draw(t)
 	local width, height = love.graphics.inverseTransformPoint(love.graphics.getDimensions())
 
 	for i, button in ipairs(self.buttons) do
-		local x = width / 2 - self.buttonWidth / 2
-		local y = height / 2 + (i - 1) * (self.buttonHeight + 10)
+		local x, y
+		if self.direction == "TD" then
+			x = width / 2 - self.buttonWidth / 2
+			y = height / 2 + (i - 1) * (self.buttonHeight + 10)
+		elseif self.direction == "LR" then
+			x = width / 3 + (i - 1) * (self.buttonWidth + 10)
+			y = height / 2 + 10
+		end
 
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.rectangle(
@@ -86,6 +98,7 @@ function menu:draw(t)
 		end
 
 		if button.image then
+			if self.selected ~= i then love.graphics.setColor(.5, .5, .5) end
 			love.graphics.draw(button.image, x, y)
 		end
 	end

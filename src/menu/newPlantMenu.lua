@@ -8,6 +8,7 @@ function newPlantMenu.new()
 
 	self.menu = menu.new("LR", {
 		{image = love.graphics.newImage("res/sunflower.png")},
+		{image = love.graphics.newImage("res/potato.png")},
 	})
 
 	return self
