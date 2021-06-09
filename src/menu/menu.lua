@@ -16,7 +16,11 @@ function menu.new(buttons)
 
 	self.selected = 1
 	self.buttons = buttons
+
 	self.alreadyPressed = {}
+	for _, binding in ipairs(self.bindings) do
+		self.alreadyPressed[binding.key] = true
+	end
 
 	return self
 end
