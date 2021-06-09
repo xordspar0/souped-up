@@ -14,7 +14,13 @@ menu.bindings = {
 function menu.new(direction, buttons)
 	local self = setmetatable({}, {__index = menu})
 
-	if not (direction == "TD" or direction == "LR") then
+	if direction == "TD" then
+		self.buttonWidth = 100
+		self.buttonHeight = 30
+	elseif direction == "LR" then
+		self.buttonWidth = 64
+		self.buttonHeight = 64
+	else
 		error("Invalid direction: " .. direction)
 	end
 	self.direction = direction
@@ -52,21 +58,20 @@ function menu:update()
 	self.selected = lume.clamp(self.selected, 1, #self.buttons)
 end
 
-local buttonWidth = 350
-local buttonHeight = 50
-function menu:draw()
-	local width, height = love.graphics.getDimensions()
+function menu:draw(t)
+	local width, height = love.graphics.inverseTransformPoint(love.graphics.getDimensions())
+
 	for i, button in ipairs(self.buttons) do
-		local x = width / 2 - buttonWidth / 2
-		local y = height / 2 + i * (buttonHeight + 10)
+		local x = width / 2 - self.buttonWidth / 2
+		local y = height / 2 + (i - 1) * (self.buttonHeight + 10)
 
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.rectangle(
 			self.selected == i and "fill" or "line",
 			x,
 			y,
-			buttonWidth,
-			buttonHeight
+			self.buttonWidth,
+			self.buttonHeight
 		)
 
 		if button.name then
@@ -75,7 +80,7 @@ function menu:draw()
 				button.name,
 				x,
 				y + 5,
-				buttonWidth,
+				self.buttonWidth,
 				"center"
 			)
 		end

@@ -13,5 +13,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.scale(4)
+
 	state:draw()
 end
