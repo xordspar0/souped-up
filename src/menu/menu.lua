@@ -12,7 +12,7 @@ menu.bindings = {
 }
 
 function menu.new(direction, buttons)
-	self = setmetatable({}, {__index = menu})
+	local self = setmetatable({}, {__index = menu})
 
 	if not (direction == "TD" or direction == "LR") then
 		error("Invalid direction: " .. direction)
@@ -37,7 +37,7 @@ function menu:update()
 
 		if input[key]() then
 			if not self.alreadyPressed[key] then
-				nextMenu = action(self)
+				local nextMenu = action(self)
 				if nextMenu ~= nil then
 					return nextMenu
 				end
