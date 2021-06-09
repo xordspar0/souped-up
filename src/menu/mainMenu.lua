@@ -1,12 +1,13 @@
 local menu = require("menu/menu")
+local newPlantMenu = require("menu/newPlantMenu")
 
 local mainMenu = {}
 
 function mainMenu.new()
 	local self = setmetatable({}, {__index = mainMenu})
 
-	self.menu = menu.new({
-		{name = "New Game", action = function() return newGameMenu end},
+	self.menu = menu.new("TD", {
+		{name = "New Game", action = function() return newPlantMenu.new() end},
 		{name = "Quit", action = function() love.event.quit() end},
 	})
 
@@ -14,7 +15,7 @@ function mainMenu.new()
 end
 
 function mainMenu:update()
-	self.menu:update()
+	return self.menu:update()
 end
 
 function mainMenu:draw()

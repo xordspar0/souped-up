@@ -4,15 +4,20 @@ local lume = require("vendor/lume")
 local menu = {}
 
 menu.bindings = {
-	{ key = "confirm", action = function(menu) return menu.buttons[menu.selected].action() end },
-	{ key = "up",      action = function(menu) menu.selected = menu.selected - 1 end },
-	{ key = "down",    action = function(menu) menu.selected = menu.selected + 1 end },
-	{ key = "up",      action = function(menu) end },
-	{ key = "up",      action = function(menu) end },
+	{ key = "confirm", action = function(self) return self.buttons[self.selected].action() end },
+	{ key = "up",      action = function(self) self.selected = self.selected - 1 end },
+	{ key = "down",    action = function(self) self.selected = self.selected + 1 end },
+	{ key = "left",    action = function(self) end },
+	{ key = "right",   action = function(self) end },
 }
 
-function menu.new(buttons)
+function menu.new(direction, buttons)
 	self = setmetatable({}, {__index = menu})
+
+	if not (direction == "TD" or direction == "LR") then
+		error("Invalid direction: " .. direction)
+	end
+	self.direction = direction
 
 	self.selected = 1
 	self.buttons = buttons
@@ -52,23 +57,32 @@ local buttonHeight = 50
 function menu:draw()
 	local width, height = love.graphics.getDimensions()
 	for i, button in ipairs(self.buttons) do
+		local x = width / 2 - buttonWidth / 2
+		local y = height / 2 + i * (buttonHeight + 10)
+
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.rectangle(
 			self.selected == i and "fill" or "line",
-			width / 2 - buttonWidth / 2,
-			height / 2 + i * (buttonHeight + 10),
+			x,
+			y,
 			buttonWidth,
 			buttonHeight
 		)
 
-		if self.selected == i then love.graphics.setColor(0, 0, 0) end
-		love.graphics.printf(
-			button.name,
-			width / 2 - buttonWidth / 2,
-			height / 2 + i * (buttonHeight + 10) + 5,
-			buttonWidth,
-			"center"
-		)
+		if button.name then
+			if self.selected == i then love.graphics.setColor(0, 0, 0) end
+			love.graphics.printf(
+				button.name,
+				x,
+				y + 5,
+				buttonWidth,
+				"center"
+			)
+		end
+
+		if button.image then
+			love.graphics.draw(button.image, x, y)
+		end
 	end
 end
 

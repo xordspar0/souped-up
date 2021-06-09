@@ -9,7 +9,7 @@ function love.load()
 end
 
 function love.update(dt)
-	state:update(dt)
+	state = state:update(dt) or state
 end
 
 function love.draw()
