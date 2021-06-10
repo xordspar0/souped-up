@@ -7,7 +7,7 @@ function menu.new(direction, buttons)
 	local self = setmetatable({}, {__index = menu})
 
 	self.bindings = {
-		{ key = "confirm", action = function(self) return self.buttons[self.selected].action() end },
+		{ key = "confirm", action = function(m) return m.buttons[m.selected].action() end },
 	}
 
 	if direction == "TD" then
@@ -15,16 +15,16 @@ function menu.new(direction, buttons)
 		self.buttonHeight = 30
 
 		lume.push(self.bindings,
-			{ key = "up",      action = function(self) self.selected = self.selected - 1 end },
-			{ key = "down",    action = function(self) self.selected = self.selected + 1 end }
+			{ key = "up",      action = function(m) m.selected = m.selected - 1 end },
+			{ key = "down",    action = function(m) m.selected = m.selected + 1 end }
 		)
 	elseif direction == "LR" then
 		self.buttonWidth = 64
 		self.buttonHeight = 64
 
 		lume.push(self.bindings,
-			{ key = "left",    action = function(self) self.selected = self.selected - 1 end },
-			{ key = "right",   action = function(self) self.selected = self.selected + 1 end }
+			{ key = "left",    action = function(m) m.selected = m.selected - 1 end },
+			{ key = "right",   action = function(m) m.selected = m.selected + 1 end }
 		)
 	else
 		error("Invalid direction: " .. direction)
@@ -64,7 +64,7 @@ function menu:update()
 	self.selected = lume.clamp(self.selected, 1, #self.buttons)
 end
 
-function menu:draw(t)
+function menu:draw()
 	local width, height = love.graphics.inverseTransformPoint(love.graphics.getDimensions())
 
 	for i, button in ipairs(self.buttons) do
