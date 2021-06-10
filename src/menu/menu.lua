@@ -14,7 +14,7 @@ function menu.new(direction, buttons)
 		self.buttonWidth = 100
 		self.buttonHeight = 30
 
-		self.bindings = lume.extend(self.bindings,
+		lume.push(self.bindings,
 			{ key = "up",      action = function(self) self.selected = self.selected - 1 end },
 			{ key = "down",    action = function(self) self.selected = self.selected + 1 end }
 		)
@@ -22,7 +22,7 @@ function menu.new(direction, buttons)
 		self.buttonWidth = 64
 		self.buttonHeight = 64
 
-		self.bindings = lume.extend(self.bindings,
+		lume.push(self.bindings,
 			{ key = "left",    action = function(self) self.selected = self.selected - 1 end },
 			{ key = "right",   action = function(self) self.selected = self.selected + 1 end }
 		)
