@@ -68,6 +68,8 @@ function menu:draw(t)
 	local width, height = love.graphics.inverseTransformPoint(love.graphics.getDimensions())
 
 	for i, button in ipairs(self.buttons) do
+		love.graphics.push("all")
+
 		local x, y
 		if self.direction == "TD" then
 			x = width / 2 - self.buttonWidth / 2
@@ -77,30 +79,31 @@ function menu:draw(t)
 			y = height / 2 + 10
 		end
 
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.rectangle(
-			self.selected == i and "fill" or "line",
-			x,
-			y,
-			self.buttonWidth,
-			self.buttonHeight
-		)
-
-		if button.name then
-			if self.selected == i then love.graphics.setColor(0, 0, 0) end
-			love.graphics.printf(
-				button.name,
-				x,
-				y + 5,
-				self.buttonWidth,
-				"center"
-			)
-		end
-
 		if button.image then
 			if self.selected ~= i then love.graphics.setColor(.5, .5, .5) end
 			love.graphics.draw(button.image, x, y)
+		else
+			love.graphics.rectangle(
+				self.selected == i and "fill" or "line",
+				x,
+				y,
+				self.buttonWidth,
+				self.buttonHeight
+			)
+
+			if button.name then
+				if self.selected == i then love.graphics.setColor(0, 0, 0) end
+				love.graphics.printf(
+					button.name,
+					x,
+					y + 5,
+					self.buttonWidth,
+					"center"
+				)
+			end
 		end
+
+		love.graphics.pop()
 	end
 end
 
