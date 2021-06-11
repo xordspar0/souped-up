@@ -3,7 +3,7 @@ local track = {}
 function track.new()
 	local self = setmetatable({}, {__index = track})
 
-	self.segmentSize = 20
+	self.segmentSize = 25
 	self.segments = {'r', 'r', 'dr', 'd', 'dl', 'l', 'l', 'ul', 'u', 'ur'}
 
 	return self
