@@ -16,9 +16,7 @@ function race.new()
 end
 
 function race:update(dt)
-	for _, car in ipairs(self.cars) do
-		car:update(dt)
-	end
+	self.cars[1]:update(dt)
 end
 
 function race:draw()
