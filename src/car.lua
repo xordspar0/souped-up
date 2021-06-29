@@ -21,10 +21,12 @@ end
 function car:update(dt)
 	if input.up() then
 		self.speed = self.maxSpeed
-	end
-	if input.down() then
+	elseif input.down() then
 		self.speed = -self.maxSpeed
+	else
+		self.speed = 0
 	end
+
 	if input.left() then
 		self.r = self.r - 0.1
 	end
