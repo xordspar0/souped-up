@@ -7,10 +7,13 @@ function car.new()
 	local self = setmetatable({}, {__index = car})
 
 	self.image = love.graphics.newImage("res/car.png")
-	self.width = 10
-	self.height = 15
-	self.maxSpeed = 1
+	self.canvasA = love.graphics.newCanvas()
+	self.canvasB = love.graphics.newCanvas()
 
+	self.width = 15
+	self.height = 20
+
+	self.maxSpeed = 1
 	self.x, self.y = 20, 20
 	self.r = 0
 	self.speed = 0
@@ -42,7 +45,23 @@ end
 function car:draw()
 	local x = math.floor(self.x)
 	local y = math.floor(self.y)
-	love.graphics.draw(self.image, self.x, self.y, self.r, 1, 1, self.width / 2, self.height / 2)
+
+	-- rotate
+	love.graphics.push()
+	love.graphics.scale(1/4, 1/4)
+
+	love.graphics.setCanvas(self.canvasA)
+	love.graphics.clear()
+	love.graphics.draw(self.image, self.width*4, self.height*4, self.r, 4, 4, self.width/2, self.height/2)
+	love.graphics.setCanvas(self.canvasB)
+	love.graphics.clear()
+	love.graphics.draw(self.canvasA, 0, 0, 0, 1/4, 1/4)
+	love.graphics.setCanvas()
+
+	love.graphics.pop()
+
+	-- draw
+	love.graphics.draw(self.canvasB, x, y, 0, 1, 1, self.width, self.height)
 end
 
 return car
