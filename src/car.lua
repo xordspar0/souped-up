@@ -10,7 +10,7 @@ function car.new()
 	self.canvasA = love.graphics.newCanvas()
 	self.canvasB = love.graphics.newCanvas()
 
-	self.width = 15
+	self.width = 16
 	self.height = 20
 
 	self.maxSpeed = 1
